@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:sizer/sizer.dart';
-
 import '../common_screen/Comman_Container.dart';
 
 class ChartScreen extends StatefulWidget {

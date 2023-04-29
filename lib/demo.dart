@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sizer/sizer.dart';
 
 import 'common_screen/Comman_Container.dart';
 import 'common_screen/Comman_TeextFiled.dart';

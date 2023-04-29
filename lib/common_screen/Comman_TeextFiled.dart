@@ -65,11 +65,21 @@ class Comman_TexxtFiled extends StatelessWidget {
         prefixIcon: prefixicon,
         fillColor: fillcolor,
         counterText: "",
-        focusedErrorBorder: FocusedErrorBorder,
-        disabledBorder: disableborder,
-        errorBorder: errorBorder,
-        enabledBorder: enabledBorder,
-        focusedBorder: focouseborder,
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }

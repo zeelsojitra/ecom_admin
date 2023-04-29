@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_admin/insert_product.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -198,13 +200,23 @@ class _Sign_UpState extends State<Sign_Up> with SingleTickerProviderStateMixin {
                       if (value != null) {
                         SharedPreferences sh =
                             await SharedPreferences.getInstance();
-                        sh
-                            .setString('email', Email_controler.text)
-                            .then((value) => Navigator.pushReplacement(
+                        sh.setString('email', Email_controler.text).then(
+                              (value) => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => Insert_Product(),
-                                )));
+                                ),
+                              ),
+                            );
+                        FirebaseFirestore.instance
+                            .collection("Seller")
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .set({
+                          "profile_image": "",
+                          "profile_name": usernamecontroler.text,
+                          "profile_email": Email_controler.text,
+                          "Seller_id": FirebaseAuth.instance.currentUser!.uid,
+                        });
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
