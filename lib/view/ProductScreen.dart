@@ -154,7 +154,18 @@ class _ProductScreenState extends State<ProductScreen> {
                   },
                 ),
               )
-            : Text("demokeo");
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      emptyorder,
+                      height: 250,
+                      width: 250,
+                    ),
+                  ],
+                ),
+              );
       },
     );
   }
