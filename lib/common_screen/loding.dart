@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import 'Comman_Container.dart';
 import 'Comman_text.dart';
@@ -16,7 +15,7 @@ class LodingDiloge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 14.sp),
+            padding: EdgeInsets.only(top: 14),
             // circular progress bar
             child: Comman_Container(
                 alignment: Alignment.center,
@@ -25,7 +24,7 @@ class LodingDiloge extends StatelessWidget {
                 )),
           ),
           SizedBox(
-            height: 10.sp,
+            height: 10,
           ),
           Comman_Text(
             text: message.toString() + " Please wait...",

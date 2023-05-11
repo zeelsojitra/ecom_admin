@@ -1,15 +1,9 @@
 import 'package:ecom_admin/insert_product.dart';
 import 'package:ecom_admin/view/sign_in.dart';
 import 'package:ecom_admin/view/sign_up.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
-import '../Phone Authentication/enter_mobile.dart';
 import '../common_screen/Comman_Container.dart';
-import '../common_screen/Comman_TeextFiled.dart';
 import '../common_screen/Comman_text.dart';
-import '../google auth service/google_auth_service.dart';
 
 class Tab_Bar extends StatefulWidget {
   const Tab_Bar({Key? key}) : super(key: key);

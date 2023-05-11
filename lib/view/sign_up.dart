@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../common_screen/Comman_Container.dart';
 import '../common_screen/Comman_TeextFiled.dart';
 import '../common_screen/Comman_text.dart';
+import '../common_screen/loding.dart';
 import '../email authantication/EmailAuthService.dart';
 
 class Sign_Up extends StatefulWidget {
@@ -194,11 +195,20 @@ class _Sign_UpState extends State<Sign_Up> with SingleTickerProviderStateMixin {
                   ontap: () {
                     print("hello");
                     if (gloablekey.currentState!.validate()) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return LodingDiloge(
+                            message: "",
+                          );
+                        },
+                      );
                       EmailAuthService.SignupUser(
                               email: Email_controler.text,
                               password: Password_controler.text)
                           .then((value) async {
                         if (value != null) {
+                          Navigator.pop(context);
                           SharedPreferences sh =
                               await SharedPreferences.getInstance();
                           sh.setString('email', Email_controler.text).then(
@@ -219,6 +229,7 @@ class _Sign_UpState extends State<Sign_Up> with SingleTickerProviderStateMixin {
                             "Seller_id": FirebaseAuth.instance.currentUser!.uid,
                           });
                         } else {
+                          Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:

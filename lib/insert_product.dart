@@ -1,21 +1,18 @@
 import 'dart:io';
-import 'package:ecom_admin/common_screen/Comman_Container.dart';
-import 'package:ecom_admin/view/ProductScreen.dart';
-import 'package:ecom_admin/view/orderScreen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_admin/view/chart.dart';
-import 'package:ecom_admin/view/inner_product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'common_screen/Comman_Container.dart';
 import 'common_screen/Comman_TeextFiled.dart';
 import 'common_screen/Comman_text.dart';
-import 'common_screen/variable.dart';
+import 'common_screen/loding.dart';
 import 'controller/Pickmultipull_image.dart';
 import 'controller/drawer_controller.dart';
 import 'globle/media_query.dart';
@@ -32,7 +29,6 @@ class _Insert_ProductState extends State<Insert_Product> {
   pickmultiImage image = Get.put(pickmultiImage());
   FirebaseAuth wfirebaseAuth = FirebaseAuth.instance;
   FirebaseStorage wfirebaseStorage = FirebaseStorage.instance;
-  String catagoeryValue = "chhattisgarh_dhoti_kurta";
   List menu = [
     {
       "name": "Home",
@@ -42,10 +38,10 @@ class _Insert_ProductState extends State<Insert_Product> {
       "name": "Analytics",
       "icon": Icons.analytics_outlined,
     },
-    // {
-    //   "name": "Users",
-    //   "icon": Icons.supervised_user_circle_sharp,
-    // },
+    {
+      "name": "Users",
+      "icon": Icons.supervised_user_circle_sharp,
+    },
     {
       "name": "User Profile",
       "icon": Icons.person,
@@ -55,18 +51,48 @@ class _Insert_ProductState extends State<Insert_Product> {
       "icon": Icons.account_box,
     },
     {
-      "name": "My Product",
+      "name": "Product",
       "icon": Icons.production_quantity_limits,
     },
     {
-      "name": "Order ",
+      "name": "Inner Product",
       "icon": Icons.shopping_cart,
+    },
+    {
+      "name": "order",
+      "icon": Icons.delivery_dining,
     },
     {
       "name": "LogOut",
       "icon": Icons.logout,
     },
+    {
+      "name": "Logout",
+      "icon": Icons.logout,
+    },
   ];
+  List Catagory = [
+    "chhattisgarh_dhoti_kurta",
+    "chhattisgarh_paghadi",
+    "chhattisgarh_saree",
+    "Goa_dangar_topi",
+    "Goa_kunbi_saree",
+    "Goa_pano_bhaju",
+    "Gujrat_bandhani",
+    "Gujrat_chaniyacoli",
+    "Gujrat_ghaghra",
+    "Gujrat_kediyu",
+    "Gujrat_patola",
+    "haryana_dhoti",
+    "haryana_ghaghra_choli",
+    "haryana_kurta_payjama",
+    // "WOMEN",
+    // "Womman",
+    // "Womman",
+    // "Womman",
+    // "Womman",
+  ];
+  String catagoeryValue = "chhattisgarh_dhoti_kurta";
   // List colorr = [
   //   Colors.black,
   //   Colors.red,
@@ -140,12 +166,12 @@ class _Insert_ProductState extends State<Insert_Product> {
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        // leading: InkWell(
-        //   onTap: () {
-        //     globalKey.currentState!.openDrawer();
-        //   },
-        //   child: Icon(Icons.menu),
-        // ),
+        leading: InkWell(
+          onTap: () {
+            globalKey.currentState!.openDrawer();
+          },
+          child: Icon(Icons.menu),
+        ),
         title: Text("E-Commerce Admin-panel"),
       ),
       body: Column(
@@ -198,464 +224,426 @@ class _Insert_ProductState extends State<Insert_Product> {
                           child: image.selected == 1
                               ? ChartScreen()
                               : image.selected == 2
-                                  ? Center(child: Text("User Profile"))
+                                  ? Center(child: Text("User"))
                                   : image.selected == 3
-                                      ? Center(child: Text("Account"))
+                                      ? Center(child: Text("User Profile"))
                                       : image.selected == 4
-                                          ? ProductScreen()
+                                          ? Center(child: Text("Account"))
                                           : image.selected == 5
-                                              ? OrderScreen()
+                                              ? Center(
+                                                  child: Text("Product Screen"))
                                               : image.selected == 6
                                                   ? Center(
-                                                      child: Text("Logout"),
-                                                    )
-                                                  : Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 25),
-                                                      child: Form(
-                                                        child:
-                                                            SingleChildScrollView(
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.05,
-                                                              ),
-                                                              SizedBox(
-                                                                width: width(
-                                                                    context),
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    Center(
-                                                                      child:
-                                                                          GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          PickImage(
-                                                                              ImageSource.gallery);
-                                                                        },
+                                                      child:
+                                                          Text("Inner Product"))
+                                                  : image.selected == 7
+                                                      ? Center(
+                                                          child: Text("Oder"))
+                                                      : image.selected == 8
+                                                          ? Center(
+                                                              child: Text(
+                                                                  "Logout"),
+                                                            )
+                                                          : Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      25),
+                                                              child: Form(
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.05,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: width(
+                                                                            context),
                                                                         child:
+                                                                            Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Center(
+                                                                              child: GestureDetector(
+                                                                                onTap: () {
+                                                                                  PickImage(ImageSource.gallery);
+                                                                                },
+                                                                                child: Container(
+                                                                                  color: Colors.grey.shade300,
+                                                                                  height: 150,
+                                                                                  width: 150,
+                                                                                  child: Icon(Icons.add),
+                                                                                ),
+                                                                              ),
+                                                                            ),
                                                                             Container(
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade300,
-                                                                          height:
-                                                                              150,
-                                                                          width:
-                                                                              150,
-                                                                          child:
-                                                                              Icon(Icons.add),
+                                                                              child: pickImage == null
+                                                                                  ? Icon(Icons.camera)
+                                                                                  : Image.memory(
+                                                                                      pickImage!,
+                                                                                    ),
+                                                                              height: 150,
+                                                                              width: 150,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ],
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                    Container(
-                                                                      child: pickImage ==
-                                                                              null
-                                                                          ? Icon(Icons
-                                                                              .camera)
-                                                                          : Image
-                                                                              .memory(
-                                                                              pickImage!,
-                                                                            ),
-                                                                      height:
-                                                                          150,
-                                                                      width:
-                                                                          150,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Text(
-                                                                "Product Detail's",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      height(context) *
-                                                                          0.03,
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Comman_TexxtFiled(
-                                                                controller:
-                                                                    product_name,
-                                                                enabledBorder:
-                                                                    OutlineInputBorder(),
-                                                                focouseborder:
-                                                                    OutlineInputBorder(),
-                                                                errorBorder:
-                                                                    OutlineInputBorder(),
-                                                                disableborder:
-                                                                    OutlineInputBorder(),
-                                                                FocusedErrorBorder:
-                                                                    OutlineInputBorder(),
-                                                                hinttext:
-                                                                    "Enter Product Name",
-                                                                sufficicon: product_name
-                                                                            .text
-                                                                            .length >=
-                                                                        2
-                                                                    ? Icon(
-                                                                        Icons
-                                                                            .check_circle,
-                                                                        color: Colors
-                                                                            .orange,
-                                                                      )
-                                                                    : SizedBox(),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Comman_TexxtFiled(
-                                                                controller:
-                                                                    product_detils,
-                                                                enabledBorder:
-                                                                    OutlineInputBorder(),
-                                                                focouseborder:
-                                                                    OutlineInputBorder(),
-                                                                errorBorder:
-                                                                    OutlineInputBorder(),
-                                                                disableborder:
-                                                                    OutlineInputBorder(),
-                                                                FocusedErrorBorder:
-                                                                    OutlineInputBorder(),
-                                                                hinttext:
-                                                                    "Enter Product Detail's",
-                                                                sufficicon: product_detils
-                                                                            .text
-                                                                            .length >=
-                                                                        2
-                                                                    ? Icon(
-                                                                        Icons
-                                                                            .check_circle,
-                                                                        color: Colors
-                                                                            .orange,
-                                                                      )
-                                                                    : SizedBox(),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Comman_Container(
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .black),
-                                                                BorderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                height: 55,
-                                                                width: double
-                                                                    .infinity,
-                                                                child: Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          left:
-                                                                              10),
-                                                                  child:
-                                                                      DropdownButton(
-                                                                    menuMaxHeight:
-                                                                        220,
-                                                                    value:
-                                                                        catagoeryValue,
-                                                                    onChanged:
-                                                                        (value) {
-                                                                      setState(
-                                                                          () {
-                                                                        catagoeryValue =
-                                                                            value
-                                                                                as String;
-                                                                      });
-                                                                    },
-                                                                    items: List
-                                                                        .generate(
-                                                                      Catagory
-                                                                          .length,
-                                                                      (index) =>
-                                                                          DropdownMenuItem(
-                                                                        value: Catagory[
-                                                                            index],
-                                                                        child: Text(
-                                                                            Catagory[index]),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
                                                                       ),
-                                                                    ),
+                                                                      Text(
+                                                                        "Product Detail's",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              height(context) * 0.03,
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      Comman_TexxtFiled(
+                                                                        controller:
+                                                                            product_name,
+                                                                        enabledBorder:
+                                                                            OutlineInputBorder(),
+                                                                        focouseborder:
+                                                                            OutlineInputBorder(),
+                                                                        errorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        disableborder:
+                                                                            OutlineInputBorder(),
+                                                                        FocusedErrorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        hinttext:
+                                                                            "Enter Product Name",
+                                                                        sufficicon: product_name.text.length >=
+                                                                                2
+                                                                            ? Icon(
+                                                                                Icons.check_circle,
+                                                                                color: Colors.orange,
+                                                                              )
+                                                                            : SizedBox(),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      Comman_TexxtFiled(
+                                                                        controller:
+                                                                            product_detils,
+                                                                        enabledBorder:
+                                                                            OutlineInputBorder(),
+                                                                        focouseborder:
+                                                                            OutlineInputBorder(),
+                                                                        errorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        disableborder:
+                                                                            OutlineInputBorder(),
+                                                                        FocusedErrorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        hinttext:
+                                                                            "Enter Product Detail's",
+                                                                        sufficicon: product_detils.text.length >=
+                                                                                2
+                                                                            ? Icon(
+                                                                                Icons.check_circle,
+                                                                                color: Colors.orange,
+                                                                              )
+                                                                            : SizedBox(),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      // Comman_TexxtFiled(
+                                                                      //   controller:
+                                                                      //       product_catagory,
+                                                                      //   enabledBorder:
+                                                                      //       OutlineInputBorder(),
+                                                                      //   focouseborder:
+                                                                      //       OutlineInputBorder(),
+                                                                      //   errorBorder:
+                                                                      //       OutlineInputBorder(),
+                                                                      //   disableborder:
+                                                                      //       OutlineInputBorder(),
+                                                                      //   FocusedErrorBorder:
+                                                                      //       OutlineInputBorder(),
+                                                                      //   hinttext:
+                                                                      //       "Enter Category Name",
+                                                                      //   sufficicon: product_catagory.text.length >=
+                                                                      //           2
+                                                                      //       ? Icon(
+                                                                      //           Icons.check_circle,
+                                                                      //           color: Colors.orange,
+                                                                      //         )
+                                                                      //       : SizedBox(),
+                                                                      // ),
+                                                                      Comman_Container(
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.black),
+                                                                        BorderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        height:
+                                                                            55,
+                                                                        width: double
+                                                                            .infinity,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.only(left: 10),
+                                                                          child:
+                                                                              DropdownButton(
+                                                                            menuMaxHeight:
+                                                                                220,
+                                                                            value:
+                                                                                catagoeryValue,
+                                                                            onChanged:
+                                                                                (value) {
+                                                                              setState(() {
+                                                                                catagoeryValue = value as String;
+                                                                              });
+                                                                            },
+                                                                            items:
+                                                                                List.generate(
+                                                                              Catagory.length,
+                                                                              (index) => DropdownMenuItem(
+                                                                                value: Catagory[index],
+                                                                                child: Text(Catagory[index]),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      Comman_TexxtFiled(
+                                                                        controller:
+                                                                            product_price,
+                                                                        enabledBorder:
+                                                                            OutlineInputBorder(),
+                                                                        focouseborder:
+                                                                            OutlineInputBorder(),
+                                                                        errorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        disableborder:
+                                                                            OutlineInputBorder(),
+                                                                        FocusedErrorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        hinttext:
+                                                                            "Enter Price",
+                                                                        sufficicon: product_price.text.length >=
+                                                                                2
+                                                                            ? Icon(
+                                                                                Icons.check_circle,
+                                                                                color: Colors.orange,
+                                                                              )
+                                                                            : SizedBox(),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      Comman_TexxtFiled(
+                                                                        enabledBorder:
+                                                                            OutlineInputBorder(),
+                                                                        focouseborder:
+                                                                            OutlineInputBorder(),
+                                                                        errorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        disableborder:
+                                                                            OutlineInputBorder(),
+                                                                        FocusedErrorBorder:
+                                                                            OutlineInputBorder(),
+                                                                        controller:
+                                                                            product_stock,
+                                                                        validator:
+                                                                            (p0) {
+                                                                          if (p0!
+                                                                              .isEmpty) {
+                                                                            return "Please Enter Stock";
+                                                                          }
+                                                                        },
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        hinttext:
+                                                                            "Enter Product Stock",
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                      // Text(
+                                                                      //   "Colors",
+                                                                      //   style:
+                                                                      //       TextStyle(
+                                                                      //     fontSize:
+                                                                      //         height(context) * 0.03,
+                                                                      //   ),
+                                                                      // ),
+                                                                      // SizedBox(
+                                                                      //   height:
+                                                                      //       height(context) * 0.035,
+                                                                      // ),
+                                                                      // Row(
+                                                                      //   mainAxisAlignment:
+                                                                      //       MainAxisAlignment.spaceEvenly,
+                                                                      //   children: List.generate(
+                                                                      //       7,
+                                                                      //       (index) => GestureDetector(
+                                                                      //             onTap: () {
+                                                                      //               image.Color.value = index;
+                                                                      //             },
+                                                                      //             child: Container(
+                                                                      //               decoration: BoxDecoration(
+                                                                      //                 shape: BoxShape.circle,
+                                                                      //                 border: Border.all(
+                                                                      //                   color: image.Color.value == index ? Colors.amber : Colors.transparent,
+                                                                      //                   width: width(context) * 0.003,
+                                                                      //                 ),
+                                                                      //               ),
+                                                                      //               child: Padding(
+                                                                      //                 padding: EdgeInsets.all(4.0),
+                                                                      //                 child: CircleAvatar(
+                                                                      //                   radius: 15,
+                                                                      //                   backgroundColor: colorr[index],
+                                                                      //                 ),
+                                                                      //               ),
+                                                                      //             ),
+                                                                      //           )),
+                                                                      // ),
+                                                                      // SizedBox(
+                                                                      //   height:
+                                                                      //       height(context) * 0.035,
+                                                                      // ),
+                                                                      // Text(
+                                                                      //   "Sizes",
+                                                                      //   style:
+                                                                      //       TextStyle(
+                                                                      //     fontSize:
+                                                                      //         height(context) * 0.03,
+                                                                      //   ),
+                                                                      // ),
+                                                                      // SizedBox(
+                                                                      //   height:
+                                                                      //       height(context) * 0.035,
+                                                                      // ),
+                                                                      // Row(
+                                                                      //   mainAxisAlignment:
+                                                                      //       MainAxisAlignment.spaceEvenly,
+                                                                      //   children:
+                                                                      //       List.generate(
+                                                                      //     6,
+                                                                      //     (index) =>
+                                                                      //         Row(
+                                                                      //       children: [
+                                                                      //         GestureDetector(
+                                                                      //           onTap: () {
+                                                                      //             image.size_selected.value = index;
+                                                                      //           },
+                                                                      //           child: Container(
+                                                                      //             height: 40,
+                                                                      //             width: 40,
+                                                                      //             decoration: BoxDecoration(color: image.size_selected.value == index ? Color(0xff95D5B2) : Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(10)),
+                                                                      //             child: Center(
+                                                                      //               child: Text(
+                                                                      //                 sizee[index],
+                                                                      //                 style: TextStyle(color: image.size_selected.value == index ? Colors.white : Colors.black),
+                                                                      //               ),
+                                                                      //             ),
+                                                                      //           ),
+                                                                      //         ),
+                                                                      //       ],
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 480),
+                                                                        child:
+                                                                            MaterialButton(
+                                                                          height:
+                                                                              height(context) * 0.07,
+                                                                          onPressed:
+                                                                              () async {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              builder: (context) {
+                                                                                return LodingDiloge(
+                                                                                  message: "",
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                            final imageUrl =
+                                                                                await uploadImage(pickImage!);
+                                                                            print("imag url${imageUrl}");
+                                                                            print("tapp");
+                                                                            DocumentReference
+                                                                                docRef =
+                                                                                FirebaseFirestore.instance.collection("Product").doc();
+                                                                            docRef.set({
+                                                                              "image": imageUrl ?? '',
+                                                                              "product_name": "${product_name.text}",
+                                                                              "product_catagory": "${product_catagory.text}",
+                                                                              "product_details": "${product_detils.text}",
+                                                                              "product_price": "${product_price.text}",
+                                                                              "product_stock": "${product_stock.text}",
+                                                                              "seller_id": FirebaseAuth.instance.currentUser!.uid,
+                                                                              "product_id": docRef.id,
+                                                                            }).then((value) {
+                                                                              {
+                                                                                Navigator.pop(context);
+                                                                                print("Success");
+                                                                                product_name.clear();
+                                                                                product_stock.clear();
+                                                                                product_catagory.clear();
+                                                                                product_detils.clear();
+                                                                                product_price.clear();
+                                                                              }
+                                                                            }).catchError(
+                                                                              (error) {
+                                                                                Navigator.pop(context);
+                                                                                print("an error occured${error}");
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                          color:
+                                                                              Color(0xff95D5B2),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Comman_Text(
+                                                                              fontsize: height(context) * 0.03,
+                                                                              text: "Add Product",
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: height(context) *
+                                                                            0.035,
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Comman_TexxtFiled(
-                                                                controller:
-                                                                    product_price,
-                                                                enabledBorder:
-                                                                    OutlineInputBorder(),
-                                                                focouseborder:
-                                                                    OutlineInputBorder(),
-                                                                errorBorder:
-                                                                    OutlineInputBorder(),
-                                                                disableborder:
-                                                                    OutlineInputBorder(),
-                                                                FocusedErrorBorder:
-                                                                    OutlineInputBorder(),
-                                                                hinttext:
-                                                                    "Enter Price",
-                                                                sufficicon: product_price
-                                                                            .text
-                                                                            .length >=
-                                                                        2
-                                                                    ? Icon(
-                                                                        Icons
-                                                                            .check_circle,
-                                                                        color: Colors
-                                                                            .orange,
-                                                                      )
-                                                                    : SizedBox(),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              Comman_TexxtFiled(
-                                                                enabledBorder:
-                                                                    OutlineInputBorder(),
-                                                                focouseborder:
-                                                                    OutlineInputBorder(),
-                                                                errorBorder:
-                                                                    OutlineInputBorder(),
-                                                                disableborder:
-                                                                    OutlineInputBorder(),
-                                                                FocusedErrorBorder:
-                                                                    OutlineInputBorder(),
-                                                                controller:
-                                                                    product_stock,
-                                                                validator:
-                                                                    (p0) {
-                                                                  if (p0!
-                                                                      .isEmpty) {
-                                                                    return "Please Enter Stock";
-                                                                  }
-                                                                },
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                hinttext:
-                                                                    "Enter Product Stock",
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                              // Text(
-                                                              //   "Colors",
-                                                              //   style:
-                                                              //       TextStyle(
-                                                              //     fontSize:
-                                                              //         height(context) * 0.03,
-                                                              //   ),
-                                                              // ),
-                                                              // SizedBox(
-                                                              //   height:
-                                                              //       height(context) * 0.035,
-                                                              // ),
-                                                              // Row(
-                                                              //   mainAxisAlignment:
-                                                              //       MainAxisAlignment.spaceEvenly,
-                                                              //   children: List.generate(
-                                                              //       7,
-                                                              //       (index) => GestureDetector(
-                                                              //             onTap: () {
-                                                              //               image.Color.value = index;
-                                                              //             },
-                                                              //             child: Container(
-                                                              //               decoration: BoxDecoration(
-                                                              //                 shape: BoxShape.circle,
-                                                              //                 border: Border.all(
-                                                              //                   color: image.Color.value == index ? Colors.amber : Colors.transparent,
-                                                              //                   width: width(context) * 0.003,
-                                                              //                 ),
-                                                              //               ),
-                                                              //               child: Padding(
-                                                              //                 padding: EdgeInsets.all(4.0),
-                                                              //                 child: CircleAvatar(
-                                                              //                   radius: 15,
-                                                              //                   backgroundColor: colorr[index],
-                                                              //                 ),
-                                                              //               ),
-                                                              //             ),
-                                                              //           )),
-                                                              // ),
-                                                              // SizedBox(
-                                                              //   height:
-                                                              //       height(context) * 0.035,
-                                                              // ),
-                                                              // Text(
-                                                              //   "Sizes",
-                                                              //   style:
-                                                              //       TextStyle(
-                                                              //     fontSize:
-                                                              //         height(context) * 0.03,
-                                                              //   ),
-                                                              // ),
-                                                              // SizedBox(
-                                                              //   height:
-                                                              //       height(context) * 0.035,
-                                                              // ),
-                                                              // Row(
-                                                              //   mainAxisAlignment:
-                                                              //       MainAxisAlignment.spaceEvenly,
-                                                              //   children:
-                                                              //       List.generate(
-                                                              //     6,
-                                                              //     (index) =>
-                                                              //         Row(
-                                                              //       children: [
-                                                              //         GestureDetector(
-                                                              //           onTap: () {
-                                                              //             image.size_selected.value = index;
-                                                              //           },
-                                                              //           child: Container(
-                                                              //             height: 40,
-                                                              //             width: 40,
-                                                              //             decoration: BoxDecoration(color: image.size_selected.value == index ? Color(0xff95D5B2) : Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(10)),
-                                                              //             child: Center(
-                                                              //               child: Text(
-                                                              //                 sizee[index],
-                                                              //                 style: TextStyle(color: image.size_selected.value == index ? Colors.white : Colors.black),
-                                                              //               ),
-                                                              //             ),
-                                                              //           ),
-                                                              //         ),
-                                                              //       ],
-                                                              //     ),
-                                                              //   ),
-                                                              // ),
-                                                              Center(
-                                                                child:
-                                                                    Comman_Container(
-                                                                  BorderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              40),
-                                                                  height:
-                                                                      Get.height *
-                                                                          0.055,
-                                                                  width:
-                                                                      Get.width *
-                                                                          0.2,
-                                                                  ontap:
-                                                                      () async {
-                                                                    final imageUrl =
-                                                                        await uploadImage(
-                                                                            pickImage!);
-                                                                    print(
-                                                                        "imag url${imageUrl}");
-                                                                    print(
-                                                                        "tapp");
-                                                                    DocumentReference
-                                                                        docRef =
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection("Product")
-                                                                            .doc();
-                                                                    docRef.set({
-                                                                      "image":
-                                                                          imageUrl ??
-                                                                              '',
-                                                                      "product_name":
-                                                                          "${product_name.text}",
-                                                                      "product_catagory":
-                                                                          "${product_catagory.text}",
-                                                                      "product_details":
-                                                                          "${product_detils.text}",
-                                                                      "product_price":
-                                                                          "${product_price.text}",
-                                                                      "product_stock":
-                                                                          "${product_stock.text}",
-                                                                      "seller_id": FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser!
-                                                                          .uid,
-                                                                      "product_id":
-                                                                          docRef
-                                                                              .id,
-                                                                    }).then(
-                                                                        (value) {
-                                                                      {
-                                                                        print(
-                                                                            "Success");
-                                                                        product_name
-                                                                            .clear();
-                                                                        product_stock
-                                                                            .clear();
-                                                                        product_catagory
-                                                                            .clear();
-                                                                        product_detils
-                                                                            .clear();
-                                                                        product_price
-                                                                            .clear();
-                                                                      }
-                                                                    }).catchError(
-                                                                      (error) {
-                                                                        print(
-                                                                            "an error occured${error}");
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  color: Color(
-                                                                      0xff95D5B2),
-                                                                  child: Center(
-                                                                    child:
-                                                                        Comman_Text(
-                                                                      fontsize:
-                                                                          22,
-                                                                      text:
-                                                                          "Add Product",
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: height(
-                                                                        context) *
-                                                                    0.035,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                            ),
                         ),
                       );
                     },

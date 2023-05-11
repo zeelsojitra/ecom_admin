@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../common_screen/Comman_Container.dart';
 import '../common_screen/Comman_TeextFiled.dart';
 import '../common_screen/Comman_text.dart';
+import '../common_screen/loding.dart';
 import '../email authantication/EmailAuthService.dart';
 
 class Sign_In extends StatefulWidget {
@@ -135,11 +136,20 @@ class _Sign_InState extends State<Sign_In> {
                     print("hello");
                     setState(() {
                       if (gloablekey.currentState!.validate()) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return LodingDiloge(
+                              message: "",
+                            );
+                          },
+                        );
                         EmailAuthService.LoginUser(
                                 password: Password_controler.text,
                                 email: Email_controler.text)
                             .then((value) async {
                           if (value != null) {
+                            Navigator.pop(context);
                             SharedPreferences sh =
                                 await SharedPreferences.getInstance();
                             sh.setString("email", Email_controler.text).then(
@@ -150,6 +160,7 @@ class _Sign_InState extends State<Sign_In> {
                                       )),
                                 );
                           } else {
+                            Navigator.pop(context);
                             setState(() {
                               isLoding = false;
                             });
